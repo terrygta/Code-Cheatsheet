@@ -6,6 +6,7 @@ Import ( "config" )
 DebugBuild = True if config.Mode == "debug" else False
 LinuxBuild = True if config.Platform == "linux" else False
 
+TargetName = "program"
 Sources = \
   [
     
@@ -17,7 +18,7 @@ env.Append ( CPPPATH = \
   ] )
 
 if LinuxBuild == False:
-  env.Append ( CPPFLAGS = [ "/Fd" + DLLNoExt + ".pdb" ] )
+  env.Append ( CPPFLAGS = [ "/Fd" + TargetName + ".pdb" ] )
    
   env.Append \
     ( CPPDEFINES =
@@ -36,11 +37,11 @@ if LinuxBuild == False:
   if DebugBuild :
     env.Append \
       ( LINKFLAGS =
-        [ "/DEBUG", "/PDB:" + DLLNoExt + ".pdb"]
+        [ "/DEBUG", "/PDB:" + TargetName + ".pdb"]
       )
       
   Target = \
-      env.env.Program ( target = DLLNoExt, source = Sources, LIBS = Libs)
+      env.env.Program ( target = TargetName, source = Sources, LIBS = Libs)
   Default ( Target )
 
   # Embed manifest into target:
@@ -60,5 +61,5 @@ else:
   ]
   
   Target = \
-      env.env.Program ( target = DLLNoExt, source = Sources, LIBS = Libs)
+      env.env.Program ( target = TargetName, source = Sources, LIBS = Libs)
   Default ( Target )
