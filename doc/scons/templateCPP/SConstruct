@@ -1,0 +1,26 @@
+import os, sys
+from SConsHelper import *
+
+SetOption ( "num_jobs", 4 )
+
+config = BuildConfig(ARGUMENTS)
+
+
+if config.Platform == "windows":
+  env = \
+      config.CreateVCEnvironment \
+        ( Environment ( MSVC_VERSION = '12.0', TARGET_ARCH='x86' ) )
+else:
+  env = \
+      config.CreateGCCEnvironment \
+        ( Environment(ENV=os.environ) )
+      
+VariantDirName= \
+    'build/' + config.Platform + "_" + config.Mode
+
+SConscript \
+  ( 'tempalte.scons',
+    exports = [ 'env', 'config'],
+    variant_dir = VariantDirName,
+    duplicate=0
+  )

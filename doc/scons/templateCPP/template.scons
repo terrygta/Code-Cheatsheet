@@ -1,0 +1,64 @@
+import os, sys, SCons.Errors
+
+Import ( "env" )
+Import ( "config" )
+
+DebugBuild = True if config.Mode == "debug" else False
+LinuxBuild = True if config.Platform == "linux" else False
+
+Sources = \
+  [
+    
+  ]
+  
+env.Append ( CPPPATH = \
+  [
+    
+  ] )
+
+if LinuxBuild == False:
+  env.Append ( CPPFLAGS = [ "/Fd" + DLLNoExt + ".pdb" ] )
+   
+  env.Append \
+    ( CPPDEFINES =
+        [ 
+        ]
+    )
+   
+  Libs = \
+  [
+  ]
+    
+  env.Append \
+    ( LINKFLAGS =
+      [ "/MANIFEST", "/SUBSYSTEM:WINDOWS", "/DYNAMICBASE", "/NXCOMPAT", "/MACHINE:X86", "/ERRORREPORT:PROMPT",]
+    )
+  if DebugBuild :
+    env.Append \
+      ( LINKFLAGS =
+        [ "/DEBUG", "/PDB:" + DLLNoExt + ".pdb"]
+      )
+      
+  Target = \
+      env.env.Program ( target = DLLNoExt, source = Sources, LIBS = Libs)
+  Default ( Target )
+
+  # Embed manifest into target:
+  env.AddPostAction \
+    ( Target,
+      Action
+        ( "mt.exe -nologo -manifest ${TARGET}.manifest " +
+          "-outputresource:$TARGET;1"
+        )
+      # The number at the end of the ''-outputresource'' argument indicates
+      #   the file type (1: EXE; 2:DLL).
+    )
+    
+else:
+  Libs = \
+  [
+  ]
+  
+  Target = \
+      env.env.Program ( target = DLLNoExt, source = Sources, LIBS = Libs)
+  Default ( Target )
