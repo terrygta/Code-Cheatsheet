@@ -66,7 +66,7 @@ class BuildConfig:
                 "sequence-point",
                 "reorder",
                 # "non-virtual-dtor",  # Good to enable.
-                "delete-non-virtual-dtor",
+                # "delete-non-virtual-dtor",
                 "empty-body",
               )
             ]

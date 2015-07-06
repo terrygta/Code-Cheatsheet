@@ -28,6 +28,8 @@ public:
   size_t GetRxSize() const;
   void FlushReadBuffer();
 
+  int getFD() { return PortFd; }
+
 private:
   int BaudRate;
   bool Opened;

@@ -19,7 +19,7 @@ VariantDirName= \
     'build/' + config.Platform + "_" + config.Mode
 
 SConscript \
-  ( 'tempalte.scons',
+  ( 'template.scons',
     exports = [ 'env', 'config'],
     variant_dir = VariantDirName,
     duplicate=0

@@ -55,12 +55,37 @@ bool CommPortT::Open(const char* deviceName, int baudRate, bool blocking)
 
   BaudRate = baudRate;
 
+  speed_t speed;
+  switch (BaudRate)
+  {
+  case 9600:
+    speed = B9600;
+    break;
+  case 19200:
+    speed = B19200;
+    break;
+  case 38400:
+    speed = B38400;
+    break;
+  case 57600:
+    speed = B57600;
+    break;
+  case 115200:
+    speed = B115200;
+    break;
+  case 230400:
+    speed = B230400;
+    break;
+  default:
+    speed = B38400;
+  }
+
   struct termios options;
   tcgetattr(PortFd, &options);
 
   // Set the baud rate
-  cfsetispeed(&options, BaudRate);
-  cfsetospeed(&options, BaudRate);
+  cfsetispeed(&options, speed);
+  cfsetospeed(&options, speed);
 
   // Enable the receiver and set local mode
   options.c_cflag |= (CLOCAL | CREAD);
@@ -173,7 +198,6 @@ size_t CommPortT::writeData(const void *data, size_t n)
   for (;;)
   {
     int bytesWritten = write(PortFd, bytePtr, bytesToWrite);
-
 
     if (bytesWritten == bytesToWrite)
     {
